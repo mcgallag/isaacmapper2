@@ -37,6 +37,7 @@ class ResourceHandler:
 
     def draw_room(self, screen, room):
         screen.set_alpha(room.alpha)
+        screen.blit(room.background, (0, 0))
 
         open_walls = room.num_open_walls()
         key = ""
@@ -70,8 +71,6 @@ class ResourceHandler:
         key += "1" if room.bombs[Room.Down] else "0"
         if key != "bomb0000":
             screen.blit(self.get(key), (0, 0))
-
-        screen.blit(room.background, (0, 0))
 
         dimmer = pygame.Surface(screen.get_size())
         dimmer.fill((0, 0, 0))
