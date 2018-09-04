@@ -19,7 +19,6 @@
 
 import Room
 import pygame
-import pathlib
 
 
 class ResourceHandler:
@@ -37,6 +36,7 @@ class ResourceHandler:
             self.images[base_name] = img
 
     def draw_room(self, screen, room):
+        screen.set_alpha(room.alpha)
         key = "room"
         if room.exits[Room.Left] is None:
             key += "0"
@@ -67,6 +67,12 @@ class ResourceHandler:
 
         screen.blit(room.background, (0, 0))
 
+        dimmer = pygame.Surface(screen.get_size())
+        dimmer.fill((0, 0, 0))
+        dimmer.set_alpha(room.alpha)
+        old_clip = screen.get_clip()
+        screen.blit(dimmer, (0, 0))
+        screen.set_clip(old_clip)
 
 # rh = ResourceHandler(pathlib.Path("/home/mike/src/isaacmapper2/images"))
 # img = rh.images["bomb0100"]

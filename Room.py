@@ -42,6 +42,7 @@ class Room:
             Up: False,
             Down: False
         }
+        self.alpha = 128
 
     def debug(self):
         print("Room")
@@ -59,12 +60,6 @@ class Room:
         bombs += "1" if self.bombs[Up] else "0"
         bombs += "1" if self.bombs[Down] else "0"
         print(bombs)
-
-    def open_exit(self, direction):
-        if self.exits[direction] is not None:
-            self.exits[direction] = None
-        else:
-            self.exits[direction] = True
 
     def translate(self, direction):
         newx = self.x + direction[0]

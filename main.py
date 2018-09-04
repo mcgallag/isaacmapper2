@@ -35,6 +35,7 @@ menu.fill((255, 0, 0))
 rh = ResourceHandler(pathlib.Path("images"))
 game_map = Map(Room.Room(0, 0, rh), rh)
 current_room = game_map.start
+current_room.alpha = 0
 
 running = True
 map_draw = True
@@ -94,7 +95,9 @@ while running:
         game_map.draw(screen, rh)
         if dx != 0 or dy != 0:
             game_map.move(dx, dy)
-            current_room = current_room.move((dx, dy))
+            current_room.alpha = 128
+            current_room = current_room.move((-dx, -dy))
+            current_room.alpha = 0
     elif menu_draw:
         screen.blit(menu, (0, 0))
 
