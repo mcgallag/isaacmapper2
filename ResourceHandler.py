@@ -37,23 +37,29 @@ class ResourceHandler:
 
     def draw_room(self, screen, room):
         screen.set_alpha(room.alpha)
-        key = "room"
-        if room.exits[Room.Left] is None:
-            key += "0"
-        else:
-            key += "1"
-        if room.exits[Room.Right] is None:
-            key += "0"
-        else:
-            key += "1"
-        if room.exits[Room.Up] is None:
-            key += "0"
-        else:
-            key += "1"
-        if room.exits[Room.Down] is None:
-            key += "0"
-        else:
-            key += "1"
+
+        open_walls = room.num_open_walls()
+        key = ""
+        if open_walls == 0:
+            key += "room"
+            key += "0" if room.exits[Room.Left] is None else "1"
+            key += "0" if room.exits[Room.Right] is None else "1"
+            key += "0" if room.exits[Room.Up] is None else "1"
+            key += "0" if room.exits[Room.Down] is None else "1"
+        elif open_walls == 1:
+            key += "threeway"
+            key += "0" if room.open_walls[Room.Left] is False else "1"
+            key += "0" if room.open_walls[Room.Right] is False else "1"
+            key += "0" if room.open_walls[Room.Up] is False else "1"
+            key += "0" if room.open_walls[Room.Down] is False else "1"
+            screen.blit(self.get(key), (0, 0))
+        elif open_walls == 2:
+            key += "corner"
+            key += "0" if room.open_walls[Room.Left] is False else "1"
+            key += "0" if room.open_walls[Room.Right] is False else "1"
+            key += "0" if room.open_walls[Room.Up] is False else "1"
+            key += "0" if room.open_walls[Room.Down] is False else "1"
+
         screen.blit(self.get(key), (0, 0))
 
         # bombs

@@ -42,7 +42,20 @@ class Room:
             Up: False,
             Down: False
         }
+        self.open_walls = {
+            Left: False,
+            Right: False,
+            Up: False,
+            Down: False
+        }
         self.alpha = 96
+
+    def num_open_walls(self):
+        num = 0
+        for wall in self.open_walls.values():
+            if wall:
+                num += 1
+        return num
 
     def highlight(self, select=None):
         """
@@ -77,11 +90,30 @@ class Room:
         print(bombs)
 
     def translate(self, direction):
+        """
+        Returns the map (x, y) coordinates if we were to move in this direction.
+        Does not perform any actual movement
+        :param direction: one of Left, Right, Up, Down constants
+        :return: (x, y) coordinates of the resulting movement
+        """
         newx = self.x + direction[0]
         newy = self.y + direction[1]
         return newx, newy
 
+    def can_move(self, direction):
+        """
+        Tests if a move in direction is possible
+        :param direction: one of Left, Right, Up, Down constants
+        :return: True if a move is possible
+        """
+        return self.exits[direction] is not None
+
     def move(self, direction):
+        """
+        Returns the room located in exit direction
+        :param direction: one of Left, Right, Up, Down constants
+        :return: Room located in direction
+        """
         if self.exits[direction] is not None:
             return self.exits[direction]
         else:

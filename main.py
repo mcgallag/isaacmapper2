@@ -107,6 +107,14 @@ while running:
                 game_map.toggle_room_exit(current_room, Room.Down, wasd_mode)
             elif event.key == pygame.K_d:
                 game_map.toggle_room_exit(current_room, Room.Right, wasd_mode)
+            elif event.key == pygame.K_LEFTBRACKET:
+                current_room.open_walls[Room.Left] = not current_room.open_walls[Room.Left]
+            elif event.key == pygame.K_RIGHTBRACKET:
+                current_room.open_walls[Room.Right] = not current_room.open_walls[Room.Right]
+            elif event.key == pygame.K_PAGEUP:
+                current_room.open_walls[Room.Up] = not current_room.open_walls[Room.Up]
+            elif event.key == pygame.K_PAGEDOWN:
+                current_room.open_walls[Room.Down] = not current_room.open_walls[Room.Down]
             elif event.key == pygame.K_SPACE:
                 current_room.debug()
 
@@ -115,10 +123,12 @@ while running:
         game_map.draw(map_screen, rh)
         menu_bar.draw(menu_bar_screen)
         if dx != 0 or dy != 0:
-            game_map.move(dx, dy)
-            current_room.highlight()
-            current_room = current_room.move((-dx, -dy))
-            current_room.highlight()
+            # check if movement is possible (i.e. a room exits)
+            if current_room.can_move((-dx, -dy)):
+                current_room.highlight()
+                current_room = current_room.move((-dx, -dy))
+                current_room.highlight()
+                game_map.move(dx, dy)
     elif menu_draw:
         # TODO - full screen option menu here?
         pass
