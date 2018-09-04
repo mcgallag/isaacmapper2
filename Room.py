@@ -17,10 +17,10 @@
 # You should have received a copy of the GNU General Public License
 # along with IsaacMapper.  If not, see <https://www.gnu.org/licenses/>.
 
-Left = 0
-Right = 1
-Up = 2
-Down = 3
+Left = (-1, 0)
+Right = (1, 0)
+Up = (0, -1)
+Down = (0, 1)
 
 
 class Room:
@@ -30,6 +30,7 @@ class Room:
         self.rh = resource_handler
         self.name = "Room"
         self.background = resource_handler.get("room_background_empty")
+        # TODO - Left exit should be none - get a room0000.png created and fix
         self.exits = {
             Left: True,
             Right: None,
@@ -48,3 +49,8 @@ class Room:
             self.exits[direction] = None
         else:
             self.exits[direction] = True
+
+    def translate(self, direction):
+        newx = self.x + direction[0]
+        newy = self.y + direction[1]
+        return newx, newy

@@ -17,11 +17,13 @@
 # You should have received a copy of the GNU General Public License
 # along with IsaacMapper.  If not, see <https://www.gnu.org/licenses/>.
 import pygame
+from Room import Room
 
 
 class Map:
-    def __init__(self, start):
+    def __init__(self, start, rh):
         self.rooms = [start]
+        self.rh = rh
         self.width = 1
         self.height = 1
         self.start = start
@@ -33,7 +35,6 @@ class Map:
 
         for room in self.rooms:
             # 1, 1   -----> width // 2 - 16  , height // 2 - 16
-            # TODO - Make sure this works for multiple rooms
             (x, y) = room.x, room.y
             drawx = width // 2 - 16 + ((x-1) * 32)
             drawy = height // 2 - 16 + ((y-1) * 32)
@@ -44,3 +45,15 @@ class Map:
         for room in self.rooms:
             room.x += dx
             room.y += dy
+
+    def mirror(self, direction):
+        mx = -1 * direction[0]
+        my = -1 * direction[1]
+        return mx, my
+
+    def add_room(self, source_room, direction):
+        newx, newy = source_room.translate(direction)
+        new_room = Room(newx, newy, self.rh)
+        source_room.exits[direction] = new_room
+        new_room.exits[self.mirror(direction)] = source_room
+        self.rooms.append(new_room)

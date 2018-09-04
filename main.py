@@ -33,7 +33,8 @@ menu = pygame.Surface(size)
 menu.fill((255, 0, 0))
 
 rh = ResourceHandler(pathlib.Path("images"))
-game_map = Map(Room.Room(1, 1, rh))
+game_map = Map(Room.Room(1, 1, rh), rh)
+current_room = game_map.start
 
 running = True
 map_draw = True
@@ -60,13 +61,13 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 dx -= 1
             elif event.key == pygame.K_w:
-                game_map.start.open_exit(Room.Up)
+                game_map.add_room(current_room, Room.Up)
             elif event.key == pygame.K_a:
-                game_map.start.open_exit(Room.Left)
+                game_map.add_room(current_room, Room.Left)
             elif event.key == pygame.K_s:
-                game_map.start.open_exit(Room.Down)
+                game_map.add_room(current_room, Room.Down)
             elif event.key == pygame.K_d:
-                game_map.start.open_exit(Room.Right)
+                game_map.add_room(current_room, Room.Right)
             elif event.key == pygame.K_SPACE:
                 map_draw = not map_draw
                 menu_draw = not menu_draw
