@@ -25,7 +25,7 @@ import Room
 
 pygame.init()
 
-size = width, height = 1024, 768
+size = width, height = 800, 600
 black = 200, 200, 200
 
 screen = pygame.display.set_mode(size)
@@ -33,12 +33,16 @@ menu = pygame.Surface(size)
 menu.fill((255, 0, 0))
 
 rh = ResourceHandler(pathlib.Path("images"))
-game_map = Map(Room.Room(1, 1, rh), rh)
+game_map = Map(Room.Room(0, 0, rh), rh)
 current_room = game_map.start
 
 running = True
 map_draw = True
 menu_draw = False
+
+EXITMODE = 1
+BOMBMODE = 2
+wasd_mode = EXITMODE
 
 while running:
     dx = 0
@@ -48,10 +52,18 @@ while running:
         if event.type == pygame.QUIT:
             running = False
             continue
+        if event.type == pygame.KEYUP:
+            if event.key == pygame.K_RSHIFT or event.key == pygame.K_LSHIFT:
+                if not pygame.key.get_mods() & pygame.KMOD_CAPS:
+                    wasd_mode = BOMBMODE if wasd_mode == EXITMODE else EXITMODE
         if event.type == pygame.KEYDOWN:
+            if pygame.key.get_mods() & pygame.KMOD_CAPS:
+                wasd_mode = BOMBMODE
             if event.key == pygame.K_ESCAPE:
                 running = False
                 continue
+            elif event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT:
+                wasd_mode = BOMBMODE
             elif event.key == pygame.K_DOWN:
                 dy -= 1
             elif event.key == pygame.K_UP:
@@ -61,23 +73,28 @@ while running:
             elif event.key == pygame.K_RIGHT:
                 dx -= 1
             elif event.key == pygame.K_w:
-                game_map.add_room(current_room, Room.Up)
+                game_map.toggle_room_exit(current_room, Room.Up, wasd_mode)
+                # game_map.add_room(current_room, Room.Up)
             elif event.key == pygame.K_a:
-                game_map.add_room(current_room, Room.Left)
+                game_map.toggle_room_exit(current_room, Room.Left, wasd_mode)
+                # game_map.add_room(current_room, Room.Left)
             elif event.key == pygame.K_s:
-                game_map.add_room(current_room, Room.Down)
+                game_map.toggle_room_exit(current_room, Room.Down, wasd_mode)
+                # game_map.add_room(current_room, Room.Down)
             elif event.key == pygame.K_d:
-                game_map.add_room(current_room, Room.Right)
+                game_map.toggle_room_exit(current_room, Room.Right, wasd_mode)
+                # game_map.add_room(current_room, Room.Right)
             elif event.key == pygame.K_SPACE:
-                map_draw = not map_draw
-                menu_draw = not menu_draw
+                # map_draw = not map_draw
+                # menu_draw = not menu_draw
+                current_room.debug()
 
     if map_draw:
         screen.fill(black)
         game_map.draw(screen, rh)
         if dx != 0 or dy != 0:
-            print("({0},{1})".format(dx, dy))
             game_map.move(dx, dy)
+            current_room = current_room.move((dx, dy))
     elif menu_draw:
         screen.blit(menu, (0, 0))
 

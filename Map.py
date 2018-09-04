@@ -34,10 +34,10 @@ class Map:
         height = screen.get_height()
 
         for room in self.rooms:
-            # 1, 1   -----> width // 2 - 16  , height // 2 - 16
+            # 0, 0   -----> width // 2 - 16  , height // 2 - 16
             (x, y) = room.x, room.y
-            drawx = width // 2 - 16 + ((x-1) * 32)
-            drawy = height // 2 - 16 + ((y-1) * 32)
+            drawx = width // 2 - 16 + (x * 32)
+            drawy = height // 2 - 16 + (y * 32)
             subscreen_rect = pygame.Rect(drawx, drawy, 32, 32)
             rh.draw_room(screen.subsurface(subscreen_rect), room)
 
@@ -55,5 +55,19 @@ class Map:
         newx, newy = source_room.translate(direction)
         new_room = Room(newx, newy, self.rh)
         source_room.exits[direction] = new_room
+        source_room.bombs[direction] = False
         new_room.exits[self.mirror(direction)] = source_room
         self.rooms.append(new_room)
+
+    def toggle_room_exit(self, source_room, direction, wasd_mode):
+        EXITMODE = 1
+        BOMBMODE = 2
+
+        if wasd_mode == EXITMODE:
+            if source_room.exits[direction] is None:
+                self.add_room(source_room, direction)
+            else:
+                deleted_room = source_room.remove_exit(direction)
+                self.rooms.remove(deleted_room)
+        elif wasd_mode == BOMBMODE:
+            source_room.bombs[direction] = not source_room.bombs[direction]

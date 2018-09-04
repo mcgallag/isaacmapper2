@@ -55,6 +55,16 @@ class ResourceHandler:
         else:
             key += "1"
         screen.blit(self.get(key), (0, 0))
+
+        # bombs
+        key = "bomb"
+        key += "1" if room.bombs[Room.Left] else "0"
+        key += "1" if room.bombs[Room.Right] else "0"
+        key += "1" if room.bombs[Room.Up] else "0"
+        key += "1" if room.bombs[Room.Down] else "0"
+        if key != "bomb0000":
+            screen.blit(self.get(key), (0, 0))
+
         screen.blit(room.background, (0, 0))
 
 

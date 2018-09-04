@@ -30,19 +30,35 @@ class Room:
         self.rh = resource_handler
         self.name = "Room"
         self.background = resource_handler.get("room_background_empty")
-        # TODO - Left exit should be none - get a room0000.png created and fix
         self.exits = {
-            Left: True,
-            Right: None,
-            Up: None,
-            Down: None
-        }
-        self.bombs = {
             Left: None,
             Right: None,
             Up: None,
             Down: None
         }
+        self.bombs = {
+            Left: False,
+            Right: False,
+            Up: False,
+            Down: False
+        }
+
+    def debug(self):
+        print("Room")
+        print("X: {0}".format(self.x))
+        print("Y: {0}".format(self.y))
+        exits = "Exits: "
+        exits += "1" if self.exits[Left] is not None else "0"
+        exits += "1" if self.exits[Right] is not None else "0"
+        exits += "1" if self.exits[Up] is not None else "0"
+        exits += "1" if self.exits[Down] is not None else "0"
+        print(exits)
+        bombs = "Bombs: "
+        bombs += "1" if self.bombs[Left] else "0"
+        bombs += "1" if self.bombs[Right] else "0"
+        bombs += "1" if self.bombs[Up] else "0"
+        bombs += "1" if self.bombs[Down] else "0"
+        print(bombs)
 
     def open_exit(self, direction):
         if self.exits[direction] is not None:
@@ -54,3 +70,14 @@ class Room:
         newx = self.x + direction[0]
         newy = self.y + direction[1]
         return newx, newy
+
+    def move(self, direction):
+        if self.exits[direction] is not None:
+            return self.exits[direction]
+        else:
+            return self
+
+    def remove_exit(self, direction):
+        r = self.exits[direction]
+        self.exits[direction] = None
+        return r
