@@ -79,18 +79,18 @@ while running:
             if event.key == pygame.K_RSHIFT or event.key == pygame.K_LSHIFT:
                 if not pygame.key.get_mods() & pygame.KMOD_CAPS:
                     toggle_wasd_mode()
+            if event.key == pygame.K_CAPSLOCK:
+                toggle_wasd_mode(EXITMODE)
         if event.type == pygame.KEYDOWN:
-            # if pygame.key.get_mods() & pygame.KMOD_CAPS:
-            #     menu_bar.highlight(True)
-            #     wasd_mode = BOMBMODE
-            # else:
-            #     menu_bar.highlight(False)
-            #     wasd_mode = EXITMODE
             if event.key == pygame.K_ESCAPE:
                 running = False
                 continue
+            elif event.key == pygame.K_CAPSLOCK:
+                print("pressed")
+                toggle_wasd_mode(BOMBMODE)
             elif event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT:
-                toggle_wasd_mode()
+                if not pygame.key.get_mods() & pygame.KMOD_CAPS:
+                    toggle_wasd_mode()
             elif event.key == pygame.K_DOWN:
                 dy -= 1
             elif event.key == pygame.K_UP:
