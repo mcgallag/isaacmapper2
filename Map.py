@@ -19,6 +19,9 @@
 import pygame
 from Room import Room
 
+EXITMODE = 1
+BOMBMODE = 2
+LINKMODE = 3
 
 class Map:
     def __init__(self, start, rh):
@@ -41,6 +44,12 @@ class Map:
             subscreen_rect = pygame.Rect(drawx, drawy, 32, 32)
             rh.draw_room(screen.subsurface(subscreen_rect), room)
 
+    def room_at(self, x, y):
+        for room in self.rooms:
+            if room.x == x and room.y == y:
+                return room
+        return None
+
     def move(self, dx, dy):
         for room in self.rooms:
             room.x += dx
@@ -58,11 +67,9 @@ class Map:
         source_room.bombs[direction] = False
         new_room.exits[self.mirror(direction)] = source_room
         self.rooms.append(new_room)
+        return new_room
 
     def toggle_room_exit(self, source_room, direction, wasd_mode):
-        EXITMODE = 1
-        BOMBMODE = 2
-
         if wasd_mode == EXITMODE:
             if source_room.exits[direction] is None:
                 self.add_room(source_room, direction)
@@ -71,3 +78,10 @@ class Map:
                 self.rooms.remove(deleted_room)
         elif wasd_mode == BOMBMODE:
             source_room.bombs[direction] = not source_room.bombs[direction]
+        elif wasd_mode == LINKMODE:
+            if not source_room.open_walls[direction] and source_room.exits[direction] is None:
+                source_room.open_walls[direction] = True
+                new_room = self.add_room(source_room, direction)
+                new_room.highlight(True)
+                new_room.open_walls[self.mirror(direction)] = True
+                source_room.add_link(new_room)

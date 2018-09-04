@@ -50,6 +50,7 @@ menu_draw = False
 
 EXITMODE = 1
 BOMBMODE = 2
+LINKMODE = 3
 wasd_mode = EXITMODE
 
 
@@ -108,13 +109,20 @@ while running:
             elif event.key == pygame.K_d:
                 game_map.toggle_room_exit(current_room, Room.Right, wasd_mode)
             elif event.key == pygame.K_LEFTBRACKET:
-                current_room.open_walls[Room.Left] = not current_room.open_walls[Room.Left]
+                game_map.toggle_room_exit(current_room, Room.Left, LINKMODE)
+                # current_room.open_walls[Room.Left] = not current_room.open_walls[Room.Left]
             elif event.key == pygame.K_RIGHTBRACKET:
-                current_room.open_walls[Room.Right] = not current_room.open_walls[Room.Right]
+                game_map.toggle_room_exit(current_room, Room.Right, LINKMODE)
+                # current_room.open_walls[Room.Right] = not current_room.open_walls[Room.Right]
             elif event.key == pygame.K_PAGEUP:
-                current_room.open_walls[Room.Up] = not current_room.open_walls[Room.Up]
+                game_map.toggle_room_exit(current_room, Room.Up, LINKMODE)
+                # current_room.open_walls[Room.Up] = not current_room.open_walls[Room.Up]
             elif event.key == pygame.K_PAGEDOWN:
-                current_room.open_walls[Room.Down] = not current_room.open_walls[Room.Down]
+                game_map.toggle_room_exit(current_room, Room.Down, LINKMODE)
+                # current_room.open_walls[Room.Down] = not current_room.open_walls[Room.Down]
+            elif event.key == pygame.K_DELETE:
+                # TODO - figure out how to delete a room
+                pass
             elif event.key == pygame.K_SPACE:
                 current_room.debug()
 

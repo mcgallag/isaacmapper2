@@ -49,6 +49,17 @@ class Room:
             Down: False
         }
         self.alpha = 96
+        self.linkedrooms = []
+
+    def is_linked(self):
+        return len(self.linkedrooms) > 0
+
+    def add_link(self, room):
+        for link in self.linkedrooms:
+            link.linkedrooms.append(room)
+            room.linkedrooms.append(link)
+        self.linkedrooms.append(room)
+        room.linkedrooms.append(self)
 
     def num_open_walls(self):
         num = 0
@@ -71,6 +82,8 @@ class Room:
                 self.alpha = dim_alpha
         else:
             self.alpha = dim_alpha if self.alpha == 0 else 0
+        for room in self.linkedrooms:
+            room.alpha = self.alpha
 
     def debug(self):
         print("Room")
