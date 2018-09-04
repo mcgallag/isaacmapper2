@@ -42,7 +42,22 @@ class Room:
             Up: False,
             Down: False
         }
-        self.alpha = 128
+        self.alpha = 96
+
+    def highlight(self, select=None):
+        """
+        Toggles highlighting on for room.
+        :param select: optional boolean specifying highlight status, acts as toggle if omitted
+        :return:
+        """
+        dim_alpha = 96
+        if select is not None:
+            if select:
+                self.alpha = 0
+            else:
+                self.alpha = dim_alpha
+        else:
+            self.alpha = dim_alpha if self.alpha == 0 else 0
 
     def debug(self):
         print("Room")

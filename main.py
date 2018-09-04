@@ -35,7 +35,7 @@ menu.fill((255, 0, 0))
 rh = ResourceHandler(pathlib.Path("images"))
 game_map = Map(Room.Room(0, 0, rh), rh)
 current_room = game_map.start
-current_room.alpha = 0
+current_room.highlight(True)
 
 running = True
 map_draw = True
@@ -75,19 +75,13 @@ while running:
                 dx -= 1
             elif event.key == pygame.K_w:
                 game_map.toggle_room_exit(current_room, Room.Up, wasd_mode)
-                # game_map.add_room(current_room, Room.Up)
             elif event.key == pygame.K_a:
                 game_map.toggle_room_exit(current_room, Room.Left, wasd_mode)
-                # game_map.add_room(current_room, Room.Left)
             elif event.key == pygame.K_s:
                 game_map.toggle_room_exit(current_room, Room.Down, wasd_mode)
-                # game_map.add_room(current_room, Room.Down)
             elif event.key == pygame.K_d:
                 game_map.toggle_room_exit(current_room, Room.Right, wasd_mode)
-                # game_map.add_room(current_room, Room.Right)
             elif event.key == pygame.K_SPACE:
-                # map_draw = not map_draw
-                # menu_draw = not menu_draw
                 current_room.debug()
 
     if map_draw:
@@ -95,9 +89,9 @@ while running:
         game_map.draw(screen, rh)
         if dx != 0 or dy != 0:
             game_map.move(dx, dy)
-            current_room.alpha = 128
+            current_room.highlight()
             current_room = current_room.move((-dx, -dy))
-            current_room.alpha = 0
+            current_room.highlight()
     elif menu_draw:
         screen.blit(menu, (0, 0))
 
