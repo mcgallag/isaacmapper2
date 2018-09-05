@@ -133,10 +133,8 @@ while running:
             # check if movement is possible (i.e. a room exits)
             if current_room.can_move(delta):
                 current_room.highlight()
-                # TODO - make sure this works with delta
                 current_room = current_room.move(delta)
                 current_room.highlight()
-                # TODO - make sure this works with delta
                 game_map.move(delta)
     elif menu_draw:
         # TODO - full screen option menu here?

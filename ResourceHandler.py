@@ -37,6 +37,7 @@ class ResourceHandler:
             self.images[base_name] = img
 
     def draw_room(self, screen, room):
+        # TODO - fix to work with new corner and threeway images
         screen.set_alpha(room.alpha)
         screen.blit(room.background, (0, 0))
 
