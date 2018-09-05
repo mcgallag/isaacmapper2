@@ -18,10 +18,12 @@
 # along with IsaacMapper.  If not, see <https://www.gnu.org/licenses/>.
 import pygame
 from Room import Room
+from constants import mirror
 
 EXITMODE = 1
 BOMBMODE = 2
 LINKMODE = 3
+
 
 class Map:
     def __init__(self, start, rh):
@@ -50,22 +52,19 @@ class Map:
                 return room
         return None
 
-    def move(self, dx, dy):
+    def move(self, delta):
+        dx = delta.value[0]
+        dy = delta.value[1]
         for room in self.rooms:
-            room.x += dx
-            room.y += dy
-
-    def mirror(self, direction):
-        mx = -1 * direction[0]
-        my = -1 * direction[1]
-        return mx, my
+            room.x -= dx
+            room.y -= dy
 
     def add_room(self, source_room, direction):
         newx, newy = source_room.translate(direction)
         new_room = Room(newx, newy, self.rh)
         source_room.exits[direction] = new_room
         source_room.bombs[direction] = False
-        new_room.exits[self.mirror(direction)] = source_room
+        new_room.exits[mirror(direction)] = source_room
         self.rooms.append(new_room)
         return new_room
 
@@ -83,5 +82,5 @@ class Map:
                 source_room.open_walls[direction] = True
                 new_room = self.add_room(source_room, direction)
                 new_room.highlight(True)
-                new_room.open_walls[self.mirror(direction)] = True
+                new_room.open_walls[mirror(direction)] = True
                 source_room.add_link(new_room)

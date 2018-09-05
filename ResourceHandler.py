@@ -19,6 +19,7 @@
 
 import Room
 import pygame
+from constants import Direction
 
 
 class ResourceHandler:
@@ -43,32 +44,32 @@ class ResourceHandler:
         key = ""
         if open_walls == 0:
             key += "room"
-            key += "0" if room.exits[Room.Left] is None else "1"
-            key += "0" if room.exits[Room.Right] is None else "1"
-            key += "0" if room.exits[Room.Up] is None else "1"
-            key += "0" if room.exits[Room.Down] is None else "1"
+            key += "0" if room.exits[Direction.LEFT] is None else "1"
+            key += "0" if room.exits[Direction.RIGHT] is None else "1"
+            key += "0" if room.exits[Direction.UP] is None else "1"
+            key += "0" if room.exits[Direction.DOWN] is None else "1"
         elif open_walls == 1:
             key += "threeway"
-            key += "0" if room.open_walls[Room.Left] is False else "1"
-            key += "0" if room.open_walls[Room.Right] is False else "1"
-            key += "0" if room.open_walls[Room.Up] is False else "1"
-            key += "0" if room.open_walls[Room.Down] is False else "1"
+            key += "0" if room.open_walls[Direction.LEFT] is False else "1"
+            key += "0" if room.open_walls[Direction.RIGHT] is False else "1"
+            key += "0" if room.open_walls[Direction.UP] is False else "1"
+            key += "0" if room.open_walls[Direction.DOWN] is False else "1"
             screen.blit(self.get(key), (0, 0))
         elif open_walls == 2:
             key += "corner"
-            key += "0" if room.open_walls[Room.Left] is False else "1"
-            key += "0" if room.open_walls[Room.Right] is False else "1"
-            key += "0" if room.open_walls[Room.Up] is False else "1"
-            key += "0" if room.open_walls[Room.Down] is False else "1"
+            key += "0" if room.open_walls[Direction.LEFT] is False else "1"
+            key += "0" if room.open_walls[Direction.RIGHT] is False else "1"
+            key += "0" if room.open_walls[Direction.UP] is False else "1"
+            key += "0" if room.open_walls[Direction.DOWN] is False else "1"
 
         screen.blit(self.get(key), (0, 0))
 
         # bombs
         key = "bomb"
-        key += "1" if room.bombs[Room.Left] else "0"
-        key += "1" if room.bombs[Room.Right] else "0"
-        key += "1" if room.bombs[Room.Up] else "0"
-        key += "1" if room.bombs[Room.Down] else "0"
+        key += "1" if room.bombs[Direction.LEFT] else "0"
+        key += "1" if room.bombs[Direction.RIGHT] else "0"
+        key += "1" if room.bombs[Direction.UP] else "0"
+        key += "1" if room.bombs[Direction.DOWN] else "0"
         if key != "bomb0000":
             screen.blit(self.get(key), (0, 0))
 

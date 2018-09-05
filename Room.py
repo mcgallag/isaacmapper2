@@ -17,10 +17,12 @@
 # You should have received a copy of the GNU General Public License
 # along with IsaacMapper.  If not, see <https://www.gnu.org/licenses/>.
 
-Left = (-1, 0)
-Right = (1, 0)
-Up = (0, -1)
-Down = (0, 1)
+from constants import Direction
+
+# Left = (-1, 0)
+# Right = (1, 0)
+# Up = (0, -1)
+# Down = (0, 1)
 
 
 class Room:
@@ -31,22 +33,22 @@ class Room:
         self.name = "Room"
         self.background = resource_handler.get("room_background_empty")
         self.exits = {
-            Left: None,
-            Right: None,
-            Up: None,
-            Down: None
+            Direction.LEFT: None,
+            Direction.RIGHT: None,
+            Direction.UP: None,
+            Direction.DOWN: None
         }
         self.bombs = {
-            Left: False,
-            Right: False,
-            Up: False,
-            Down: False
+            Direction.LEFT: False,
+            Direction.RIGHT: False,
+            Direction.UP: False,
+            Direction.DOWN: False
         }
         self.open_walls = {
-            Left: False,
-            Right: False,
-            Up: False,
-            Down: False
+            Direction.LEFT: False,
+            Direction.RIGHT: False,
+            Direction.UP: False,
+            Direction.DOWN: False
         }
         self.alpha = 96
         self.linkedrooms = []
@@ -90,16 +92,16 @@ class Room:
         print("X: {0}".format(self.x))
         print("Y: {0}".format(self.y))
         exits = "Exits: "
-        exits += "1" if self.exits[Left] is not None else "0"
-        exits += "1" if self.exits[Right] is not None else "0"
-        exits += "1" if self.exits[Up] is not None else "0"
-        exits += "1" if self.exits[Down] is not None else "0"
+        exits += "1" if self.exits[Direction.LEFT] is not None else "0"
+        exits += "1" if self.exits[Direction.RIGHT] is not None else "0"
+        exits += "1" if self.exits[Direction.UP] is not None else "0"
+        exits += "1" if self.exits[Direction.DOWN] is not None else "0"
         print(exits)
         bombs = "Bombs: "
-        bombs += "1" if self.bombs[Left] else "0"
-        bombs += "1" if self.bombs[Right] else "0"
-        bombs += "1" if self.bombs[Up] else "0"
-        bombs += "1" if self.bombs[Down] else "0"
+        bombs += "1" if self.bombs[Direction.LEFT] else "0"
+        bombs += "1" if self.bombs[Direction.RIGHT] else "0"
+        bombs += "1" if self.bombs[Direction.UP] else "0"
+        bombs += "1" if self.bombs[Direction.DOWN] else "0"
         print(bombs)
 
     def translate(self, direction):
@@ -109,8 +111,8 @@ class Room:
         :param direction: one of Left, Right, Up, Down constants
         :return: (x, y) coordinates of the resulting movement
         """
-        newx = self.x + direction[0]
-        newy = self.y + direction[1]
+        newx = self.x + direction.value[0]
+        newy = self.y + direction.value[1]
         return newx, newy
 
     def can_move(self, direction):

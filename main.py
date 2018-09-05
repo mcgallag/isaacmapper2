@@ -23,6 +23,7 @@ from ResourceHandler import ResourceHandler
 from Map import Map
 from menu import Menu
 import Room
+from constants import Direction
 
 pygame.init()
 
@@ -69,8 +70,7 @@ def toggle_wasd_mode(b=None):
 
 
 while running:
-    dx = 0
-    dy = 0
+    delta = None
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -87,38 +87,37 @@ while running:
                 running = False
                 continue
             elif event.key == pygame.K_CAPSLOCK:
-                print("pressed")
                 toggle_wasd_mode(BOMBMODE)
             elif event.key == pygame.K_LSHIFT or event.key == pygame.K_RSHIFT:
                 if not pygame.key.get_mods() & pygame.KMOD_CAPS:
                     toggle_wasd_mode()
             elif event.key == pygame.K_DOWN:
-                dy -= 1
+                delta = Direction.DOWN
             elif event.key == pygame.K_UP:
-                dy += 1
+                delta = Direction.UP
             elif event.key == pygame.K_LEFT:
-                dx += 1
+                delta = Direction.LEFT
             elif event.key == pygame.K_RIGHT:
-                dx -= 1
+                delta = Direction.RIGHT
             elif event.key == pygame.K_w:
-                game_map.toggle_room_exit(current_room, Room.Up, wasd_mode)
+                game_map.toggle_room_exit(current_room, Direction.UP, wasd_mode)
             elif event.key == pygame.K_a:
-                game_map.toggle_room_exit(current_room, Room.Left, wasd_mode)
+                game_map.toggle_room_exit(current_room, Direction.LEFT, wasd_mode)
             elif event.key == pygame.K_s:
-                game_map.toggle_room_exit(current_room, Room.Down, wasd_mode)
+                game_map.toggle_room_exit(current_room, Direction.DOWN, wasd_mode)
             elif event.key == pygame.K_d:
-                game_map.toggle_room_exit(current_room, Room.Right, wasd_mode)
+                game_map.toggle_room_exit(current_room, Direction.RIGHT, wasd_mode)
             elif event.key == pygame.K_LEFTBRACKET:
-                game_map.toggle_room_exit(current_room, Room.Left, LINKMODE)
+                game_map.toggle_room_exit(current_room, Direction.LEFT, LINKMODE)
                 # current_room.open_walls[Room.Left] = not current_room.open_walls[Room.Left]
             elif event.key == pygame.K_RIGHTBRACKET:
-                game_map.toggle_room_exit(current_room, Room.Right, LINKMODE)
+                game_map.toggle_room_exit(current_room, Direction.RIGHT, LINKMODE)
                 # current_room.open_walls[Room.Right] = not current_room.open_walls[Room.Right]
             elif event.key == pygame.K_PAGEUP:
-                game_map.toggle_room_exit(current_room, Room.Up, LINKMODE)
+                game_map.toggle_room_exit(current_room, Direction.UP, LINKMODE)
                 # current_room.open_walls[Room.Up] = not current_room.open_walls[Room.Up]
             elif event.key == pygame.K_PAGEDOWN:
-                game_map.toggle_room_exit(current_room, Room.Down, LINKMODE)
+                game_map.toggle_room_exit(current_room, Direction.DOWN, LINKMODE)
                 # current_room.open_walls[Room.Down] = not current_room.open_walls[Room.Down]
             elif event.key == pygame.K_DELETE:
                 # TODO - figure out how to delete a room
@@ -130,13 +129,15 @@ while running:
         map_screen.fill(black)
         game_map.draw(map_screen, rh)
         menu_bar.draw(menu_bar_screen)
-        if dx != 0 or dy != 0:
+        if delta is not None:
             # check if movement is possible (i.e. a room exits)
-            if current_room.can_move((-dx, -dy)):
+            if current_room.can_move(delta):
                 current_room.highlight()
-                current_room = current_room.move((-dx, -dy))
+                # TODO - make sure this works with delta
+                current_room = current_room.move(delta)
                 current_room.highlight()
-                game_map.move(dx, dy)
+                # TODO - make sure this works with delta
+                game_map.move(delta)
     elif menu_draw:
         # TODO - full screen option menu here?
         pass
